@@ -1,6 +1,9 @@
 <script lang="ts">
-	import '@skeletonlabs/skeleton/themes/theme-skeleton.css';
+	import '../theme.css';
+	import '@skeletonlabs/skeleton/styles/all.css';
 	import '../app.postcss';
+	import { Toast } from '@skeletonlabs/skeleton';
 </script>
 
+<Toast />
 <slot />
