@@ -5,6 +5,7 @@
 	import { goto } from '$app/navigation';
 	let username = '';
 	let password = '';
+	let disabled = true;
 
 	let loading = false;
 
@@ -26,7 +27,7 @@
 
 		if (data.error) {
 			toastStore.trigger({
-				message: 'Invalid credentials',
+				message: data.error,
 				timeout: 3000,
 				autohide: true,
 				classes: 'bg-warning-500'
@@ -43,6 +44,16 @@
 
 		loading = false;
 	}
+
+	function validate() {
+		if (username.length > 0 || password.length > 0) {
+			disabled = false;
+		} else {
+			disabled = true;
+		}
+	}
+
+	$: username, password, validate();
 </script>
 
 <div class="flex flex-col items-center">
@@ -87,6 +98,8 @@
 			/>
 		</label>
 		<a href="/register" class="text-xs text-surface-50 w-full text-left ">Don't have an account?</a>
-		<button class="btn btn-filled-primary w-full text-white" on:click={login}>Login!</button>
+		<button class="btn btn-filled-primary w-full text-white" {disabled} on:click={login}
+			>Login!</button
+		>
 	</div>
 </div>
