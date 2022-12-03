@@ -6,7 +6,7 @@ const config = {
 		extend: {}
 	},
 
-	plugins: [require('@skeletonlabs/skeleton/tailwind/theme.cjs')]
+	plugins: [require('@skeletonlabs/skeleton/tailwind/theme.cjs'), require('@tailwindcss/forms'),]
 };
 
 module.exports = config;

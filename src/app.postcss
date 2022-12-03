@@ -1,13 +1,9 @@
-/* Write your global styles here, in PostCSS syntax */
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-html {
-	@apply bg-surface-700;
-}
-
 html,
 body {
-	@apply h-full overflow-hidden;
+	@apply h-full overflow-hidden bg-surface-900 text-black dark:text-white;
+}
+
+input[type='text'],
+input[type='password'] {
+	@apply bg-surface-700 text-white px-3 py-1 border-opacity-20;
 }
