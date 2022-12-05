@@ -18,7 +18,9 @@
 </script>
 
 <div class="flex flex-col items-center">
-	<div class="bg-surface-800 p-5 flex-col flex items-center max-w-[34rem] rounded-md mt-48">
+	<div
+		class="dark:bg-surface-800 bg-surface-100 p-5 flex-col flex items-center max-w-[34rem] rounded-md mt-48"
+	>
 		<h1 class="text-4xl font-heading-token text-white text-center">
 			spotify-soundcloud-youtube-client
 		</h1>
