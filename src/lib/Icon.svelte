@@ -12,10 +12,9 @@
 	xmlns="http://www.w3.org/2000/svg"
 	{width}
 	{height}
-	{viewBox}
 	stroke={color}
 	fill={color}
-	stroke-width="0.5px"
+	stroke-width="1px"
 >
 	<path d={path} />
 </svg>
