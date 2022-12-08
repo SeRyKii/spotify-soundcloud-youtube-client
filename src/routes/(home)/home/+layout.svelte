@@ -11,7 +11,7 @@
 </script>
 
 <AppShell>
-	<svelte:fragment slot="header">
+	<div class="mb-1" slot="header">
 		<AppBar>
 			<svelte:fragment slot="lead">
 				<h1>My App</h1>
@@ -22,10 +22,10 @@
 				<button>Test</button>
 			</svelte:fragment>
 		</AppBar>
-	</svelte:fragment>
+	</div>
 
 	<div class="w-fit sm:w-64" slot="sidebarLeft">
-		<DeviceDetector showInDevice="desktop">
+		<div class="hidden sm:block">
 			<!-- Home -->
 			<div>
 				<a
@@ -36,7 +36,7 @@
 					<span>Home</span>
 				</a>
 			</div>
-			<div class="flex flex-row">
+			<div class="flex flex-row mt-1 gap-1">
 				<!-- Add Playlist -->
 				<a
 					href="/home/playlist/add"
@@ -52,15 +52,15 @@
 					<span><Fa icon={faHeart} size="" /></span>
 				</a>
 			</div>
-		</DeviceDetector>
+		</div>
 		<!-- button to open a drawer if mobile -->
-		<DeviceDetector showInDevice="mobile">
+		<div class="block sm:hidden">
 			<button class="btn btn-ghost-primary p-5" on:click={() => drawer.set(true)}>
 				<span><Fa icon={faBars} size="" /></span>
 			</button>
-		</DeviceDetector>
+		</div>
 	</div>
-	<DeviceDetector showInDevice="mobile">
+	<div class="bock sm:hidden">
 		<Drawer open={drawer} position="left">
 			<a
 				on:click={() => drawer.set(true)}
@@ -70,7 +70,7 @@
 				<span><Fa icon={faHome} translateY="0.05" size="xs" /></span>
 				<span>Home</span>
 			</a>
-			<div class="flex flex-row">
+			<div class="flex flex-row mt-1 gap-1">
 				<a
 					class="btn btn-ghost-primary text-xl dark:bg-surface-900 bg-surface-100 flex-1 items-center justify-center"
 					href="/home/playlist/add"
@@ -85,7 +85,7 @@
 				</a>
 			</div>
 		</Drawer>
-	</DeviceDetector>
+	</div>
 
 	<div class="">
 		<slot />

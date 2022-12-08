@@ -1,6 +1,4 @@
 <script lang="ts">
-	import { mdiLogin } from '@mdi/js';
-	import Icon from '$lib/Icon.svelte';
 	import { goto } from '$app/navigation';
 	import { token } from '$lib/stores';
 
@@ -31,9 +29,6 @@
 		</span>
 
 		<button class="btn btn-filled-primary text-white mt-5" on:click={redirectToLogin}>
-			<span>
-				<Icon path={mdiLogin} color="currentColor" />
-			</span>
 			<span>Go to sign in/up</span>
 		</button>
 	</div>
