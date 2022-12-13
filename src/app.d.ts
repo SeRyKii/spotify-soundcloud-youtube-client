@@ -7,3 +7,9 @@ declare namespace App {
 	// interface PageData {}
 	// interface Platform {}
 }
+
+type spotifyOAuth = {
+	access_token: string;
+	refresh_token: string;
+	expires_in: number;
+};
