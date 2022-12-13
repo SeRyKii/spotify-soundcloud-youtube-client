@@ -38,7 +38,12 @@ type Track = {
 	playlist_id: number;
 	track_id: number;
 	service_type: Service;
-	data: unknown;
+	data:
+		| {
+				artist: Artist;
+				album: Album;
+		  }
+		| any;
 	cover: string;
 	title: string;
 	created_at: number;

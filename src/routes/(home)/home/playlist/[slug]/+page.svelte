@@ -79,7 +79,7 @@
 			{/each}
 		{:then playlist}
 			{#each playlist.tracks as track, i}
-				<Track {track} placeholder={false} />
+				<Track {track} />
 			{/each}
 		{/await}
 	</div>
