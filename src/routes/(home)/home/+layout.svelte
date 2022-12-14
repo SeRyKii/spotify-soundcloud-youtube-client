@@ -1,13 +1,39 @@
-<script>
-	import { LightSwitch } from '@skeletonlabs/skeleton';
+<script lang="ts">
+	import { LightSwitch, menu } from '@skeletonlabs/skeleton';
 	import { faHome, faPlus, faHeart, faBars } from '@fortawesome/free-solid-svg-icons';
 	import Fa from 'svelte-fa';
 	import { writable } from 'svelte/store';
-	import { AppShell, AppBar, Drawer } from '@skeletonlabs/skeleton';
+	import { AppShell, AppBar, Drawer, Avatar } from '@skeletonlabs/skeleton';
+	import { token, globals } from '$lib/stores';
 	// @ts-ignore
 	import DeviceDetector from 'svelte-device-detector';
+	import { getUserInfo } from '$lib/api/user';
+	import { goto } from '$app/navigation';
+	import { onMount } from 'svelte';
+
+	onMount(() => {
+		if (!$token || $token.length === 0) {
+			goto('/login');
+		}
+	});
 
 	const drawer = writable(false);
+
+	const getInitials = (name: string) => {
+		return name
+			.split(' ')
+			.map((n) => n[0])
+			.join('')
+			.toUpperCase()
+			.substring(0, 2);
+	};
+
+	function logout() {
+		$token = '';
+		goto('/login');
+	}
+
+	let user = getUserInfo($token, $globals.backendUrl);
 </script>
 
 <AppShell>
@@ -18,8 +44,33 @@
 			</svelte:fragment>
 			<h1>TEST</h1>
 			<svelte:fragment slot="trail">
-				<LightSwitch />
-				<button>Test</button>
+				<span class="relative">
+					<button use:menu={{ menu: 'account' }} class="flex flex-row gap-2 items-center">
+						{#await user}
+							<!-- use placeholder class -->
+							<div class="placeholder-circle w-8 h-8 animate-pulse" />
+							<div class="placeholder w-32 h-4 animate-pulse" />
+						{:then user}
+							<Avatar
+								src={user.avatar}
+								width="w-8"
+								initials={getInitials(user.username)}
+								rounded="rounded-full"
+							/>
+							<span>{user.username}</span>
+						{/await}
+					</button>
+					<!-- menu -->
+					<div data-menu="account">
+						<div class="bg-surface-100 dark:bg-surface-900 rounded-md shadow-md">
+							<div class="flex flex-col gap-2 p-2">
+								<a href="/home/profile" class="btn btn-ghost-primary w-full">Profile</a>
+								<a href="/home/settings" class="btn btn-ghost-primary w-full">Settings</a>
+								<button on:click={logout} class="btn btn-ghost-primary w-full">Logout</button>
+							</div>
+						</div>
+					</div>
+				</span>
 			</svelte:fragment>
 		</AppBar>
 	</div>

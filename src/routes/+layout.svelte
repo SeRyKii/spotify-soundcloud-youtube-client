@@ -3,7 +3,15 @@
 	import '@skeletonlabs/skeleton/styles/all.css';
 	import '../app.postcss';
 	import { Toast } from '@skeletonlabs/skeleton';
+
+	const themes = [
+		
+	]
+
+	let style =
 </script>
 
 <Toast />
-<slot />
+<div {style}>
+	<slot />
+</div>
