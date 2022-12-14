@@ -52,6 +52,7 @@
 			disabled = true;
 		}
 	}
+	validate();
 
 	$: username, password, validate();
 </script>

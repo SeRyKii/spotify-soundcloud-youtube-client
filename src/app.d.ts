@@ -80,4 +80,10 @@ type SimplifiedPlaylistList = SimplifiedPlaylist[];
 type SimplifiedPlaylistView = {
 	meta: SimplifiedPlaylist;
 	tracks: SimplifiedTrack[];
+}
+
+type spotifyOAuth = {
+	access_token: string;
+	refresh_token: string;
+	expires_in: number;
 };
