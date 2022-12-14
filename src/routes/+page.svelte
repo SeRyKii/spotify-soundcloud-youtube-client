@@ -1,6 +1,4 @@
 <script lang="ts">
-	import { mdiLogin } from '@mdi/js';
-	import Icon from '$lib/Icon.svelte';
 	import { goto } from '$app/navigation';
 	import { token } from '$lib/stores';
 
@@ -18,7 +16,9 @@
 </script>
 
 <div class="flex flex-col items-center">
-	<div class="bg-surface-800 p-5 flex-col flex items-center max-w-[34rem] rounded-md mt-48">
+	<div
+		class="dark:bg-surface-800 bg-surface-100 p-5 flex-col flex items-center max-w-[34rem] rounded-md mt-48"
+	>
 		<h1 class="text-4xl font-heading-token text-white text-center">
 			spotify-soundcloud-youtube-client
 		</h1>
@@ -29,9 +29,6 @@
 		</span>
 
 		<button class="btn btn-filled-primary text-white mt-5" on:click={redirectToLogin}>
-			<span>
-				<Icon path={mdiLogin} color="currentColor" />
-			</span>
 			<span>Go to sign in/up</span>
 		</button>
 	</div>

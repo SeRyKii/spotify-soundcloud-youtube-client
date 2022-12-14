@@ -57,8 +57,10 @@
 	$: username, password, validate();
 </script>
 
-<div class="flex flex-col items-center">
-	<div class="bg-surface-800 p-3 flex-col flex gap-3 justify-start w-64 sm:w-1/3 mt-12 relative">
+<div class="flex flex-col items-center dark:text-white text-black">
+	<div
+		class="dark:bg-surface-800 bg-surface-200 p-3 flex-col flex gap-3 justify-start w-64 sm:w-1/3 mt-12 relative"
+	>
 		{#if loading == true}
 			<div
 				class="backdrop-brightness-50 absolute top-0 left-0 w-full h-full flex flex-col items-center justify-center z-10"
@@ -69,7 +71,7 @@
 			</div>
 		{/if}
 		<label for="name">
-			<span class="text-white text-sm">Username</span>
+			<span class="text-sm">Username</span>
 			<input
 				type="text"
 				id="name"
@@ -84,7 +86,7 @@
 			/>
 		</label>
 		<label for="password">
-			<span class="text-white text-sm">Password</span>
+			<span class="text-sm">Password</span>
 			<input
 				type="password"
 				id="password"
@@ -98,9 +100,7 @@
 				required
 			/>
 		</label>
-		<a href="/register" class="text-xs text-surface-50 w-full text-left ">Don't have an account?</a>
-		<button class="btn btn-filled-primary w-full text-white" {disabled} on:click={login}
-			>Login!</button
-		>
+		<a href="/register" class="text-xs w-full text-left ">Don't have an account?</a>
+		<button class="btn btn-filled-primary w-full" {disabled} on:click={login}>Login!</button>
 	</div>
 </div>
