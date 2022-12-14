@@ -8,7 +8,7 @@ declare namespace App {
 	// interface Platform {}
 }
 
-type Playlist = {
+type DbPlaylist = {
 	id: number;
 	name: string;
 	cover: string;
@@ -18,47 +18,66 @@ type Playlist = {
 	username: string;
 };
 
-type PlaylistList = {
-	playlists: Playlist[];
-};
+type DbPlaylistList = DbPlaylist[];
 
-type PlaylistView = {
-	meta: Playlist;
-	tracks: Track[];
+type DbPlaylistView = {
+	meta: DbPlaylist;
+	tracks: DbTrack[];
 };
 
 declare enum Service {
 	Spotify = 'spotify',
 	YouTube = 'youtube',
-	SoundCloud = 'soundcloud'
+	SoundCloud = 'soundcloud',
+	None = 'none'
 }
 
-type Track = {
+type DbTrack = {
 	id: number;
 	playlist_id: number;
 	track_id: number;
 	service_type: Service;
-	data:
-		| {
-				artist: Artist;
-				album: Album;
-		  }
-		| any;
-	cover: string;
-	title: string;
 	created_at: number;
 	updated_at: number;
 };
 
-type Album = {
+type SimplifiedAlbum = {
 	id: string;
 	service: Service;
 	title: string;
 	cover: string;
 };
 
-type Artist = {
+type SimplifiedArtist = {
 	id: string;
 	service: Service;
 	name: string;
+};
+
+type SimplifiedTrack = {
+	id: string;
+	service: Service;
+	title: string;
+	cover: string;
+	artists: SimplifiedArtist[];
+	album: SimplifiedAlbum;
+	duration: number;
+};
+
+type SimplifiedTrackList = SimplifiedTrack[];
+
+type SimplifiedPlaylist = {
+	id: string;
+	service: Service;
+	title: string;
+	cover: string;
+	username: string;
+	avatar: string;
+};
+
+type SimplifiedPlaylistList = SimplifiedPlaylist[];
+
+type SimplifiedPlaylistView = {
+	meta: SimplifiedPlaylist;
+	tracks: SimplifiedTrack[];
 };

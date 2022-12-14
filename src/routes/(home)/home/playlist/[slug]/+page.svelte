@@ -3,6 +3,7 @@
 	export let data: PageData;
 	import { Divider } from '@skeletonlabs/skeleton';
 	import { toastStore, type ToastSettings } from '@skeletonlabs/skeleton';
+	import { getTrackBulkDetails } from '$lib/services';
 	import { Avatar } from '@skeletonlabs/skeleton';
 	import { globals, token } from '$lib/stores';
 	import { playlistView } from '$lib/api/playlist';
@@ -25,6 +26,7 @@
 	};
 
 	let result = getPlaylist();
+	// Implement some kind of bulking the requests or smth
 </script>
 
 <div class="ml-12 mt-5 flex flex-col gap-5 w-3/4">
@@ -72,7 +74,7 @@
 		</div>
 	</div>
 	<Divider />
-	<div>
+	<div class="flex flex-col gap-2">
 		{#await result}
 			{#each Array(10) as _, i}
 				<TrackPlaceholder />

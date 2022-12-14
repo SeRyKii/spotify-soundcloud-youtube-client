@@ -2,8 +2,8 @@ export const playlistView = async (
 	slug: string,
 	token: string,
 	backendUrl: string
-): Promise<PlaylistView> => {
-	const result: PlaylistView = {
+): Promise<DbPlaylistView> => {
+	const result: DbPlaylistView = {
 		meta: {
 			id: 0,
 			name: '',
@@ -25,7 +25,7 @@ export const playlistMeta = async (
 	slug: string,
 	token: string,
 	backendUrl: string
-): Promise<Playlist> => {
+): Promise<DbPlaylist> => {
 	const res = await fetch(`${backendUrl}/api/playlist/${slug}`, {
 		headers: {
 			content_type: 'application/json',
@@ -33,7 +33,7 @@ export const playlistMeta = async (
 		}
 	});
 	if (res.ok) {
-		return await res.json();
+		return (await res.json()) as DbPlaylist;
 	} else {
 		throw new Error(res.statusText);
 	}
@@ -43,7 +43,7 @@ export const playlistTracks = async (
 	slug: string,
 	token: string,
 	backendUrl: string
-): Promise<Track[]> => {
+): Promise<DbTrack[]> => {
 	const res = await fetch(`${backendUrl}/api/playlist/${slug}/tracks`, {
 		headers: {
 			content_type: 'application/json',
@@ -51,7 +51,7 @@ export const playlistTracks = async (
 		}
 	});
 	if (res.ok) {
-		return await res.json();
+		return (await res.json()) as DbTrack[];
 	} else {
 		throw new Error(res.statusText);
 	}
