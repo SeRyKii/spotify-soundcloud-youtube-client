@@ -15,4 +15,5 @@ export const spotifyOAuth: Writable<spotifyOAuth> = localStorageStore(
 	'spotify',
 	{} as spotifyOAuth
 );
+export const spotifySaveToDb: Writable<boolean> = localStorageStore('spotify_save_to_db', false);
 export const spotifyCodeVerifier: Writable<string> = localStorageStore('spotify_code_verifier', '');

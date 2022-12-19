@@ -5,12 +5,11 @@
 	import { globals, theme, customTheme } from '$lib/stores';
 	import { themes } from '$lib/themes';
 	import { onMount } from 'svelte';
-	let lastTheme = 0;
 	onMount(() => {
 		let customCss = '';
 		theme.subscribe((theme) => {
-			if (theme != -1) {
-				const style =
+			if (theme >= 0) {
+				let style =
 					(document.getElementById('themeStyle') as HTMLStyleElement) ||
 					document.createElement('style');
 				style.innerHTML = '';

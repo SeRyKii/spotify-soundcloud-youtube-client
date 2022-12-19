@@ -6,7 +6,9 @@ export const getUserInfo = async (token: string, backendUrl: string): Promise<Us
 		}
 	});
 	if (res.ok) {
-		return (await res.json()) as UserDB;
+		const json = await res.json();
+		if (json.error) throw new Error(json.error);
+		return json as UserDB;
 	} else {
 		throw new Error(res.statusText);
 	}
