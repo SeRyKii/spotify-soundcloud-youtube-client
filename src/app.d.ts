@@ -8,6 +8,28 @@ declare namespace App {
 	// interface Platform {}
 }
 
+declare module '@fortawesome/free-brands-svg-icons/index.es' {
+	export * from '@fortawesome/free-brands-svg-icons';
+}
+
+type UserDB = {
+	id: number;
+	username: string;
+	password_hash: string;
+	salt: string;
+	avatar: string;
+	token: string;
+	oauth_spotify: string;
+	oauth_spotify_refresh: string;
+	oauth_spotify_expires_at: string;
+	oauth_soundcloud: string;
+	oauth_soundcloud_refresh: string;
+	oauth_soundcloud_expires_at: string;
+	settings: string;
+	created_at: number;
+	updated_at: number;
+};
+
 type DbPlaylist = {
 	id: number;
 	name: string;
@@ -80,7 +102,7 @@ type SimplifiedPlaylistList = SimplifiedPlaylist[];
 type SimplifiedPlaylistView = {
 	meta: SimplifiedPlaylist;
 	tracks: SimplifiedTrack[];
-}
+};
 
 type spotifyOAuth = {
 	access_token: string;

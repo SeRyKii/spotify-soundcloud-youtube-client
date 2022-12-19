@@ -41,6 +41,7 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"@fortawesome/free-brands-svg-icons": "^6.2.1",
 		"@fortawesome/free-solid-svg-icons": "^6.2.1",
 		"@mdi/js": "^7.0.96",
 		"svelte-device-detector": "^0.2.2",
