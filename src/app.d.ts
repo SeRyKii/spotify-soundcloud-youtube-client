@@ -8,6 +8,10 @@ declare namespace App {
 	// interface Platform {}
 }
 
+declare module '@fortawesome/free-brands-svg-icons/index.es' {
+	export * from '@fortawesome/free-brands-svg-icons';
+}
+
 type UserDB = {
 	id: number;
 	username: string;

@@ -4,7 +4,7 @@
 	import Fa from 'svelte-fa';
 	import { writable } from 'svelte/store';
 	import { AppShell, AppBar, Drawer, Avatar } from '@skeletonlabs/skeleton';
-	import { token, globals } from '$lib/stores';
+	import { token, globals, spotifyOAuth, spotifySaveToDb } from '$lib/stores';
 	// @ts-ignore
 	import DeviceDetector from 'svelte-device-detector';
 	import { getUserInfo } from '$lib/api/user';
@@ -32,8 +32,18 @@
 		$token = '';
 		goto('/login');
 	}
-
 	let user = getUserInfo($token, $globals.backendUrl);
+
+	user.catch((err) => {
+		console.log(err);
+		$token = '';
+	});
+
+	onMount(() => {
+		if (!$token || $token.length === 0) {
+			goto('/login');
+		}
+	});
 </script>
 
 <AppShell>
@@ -58,6 +68,20 @@
 								rounded="rounded-full"
 							/>
 							<span>{user.username}</span>
+							<!-- This shouldnt work -->
+							<div class="hidden">
+								{() => {
+									if ($spotifySaveToDb === true) {
+										spotifyOAuth.set({
+											access_token: user.oauth_spotify,
+											refresh_token: user.oauth_spotify_refresh,
+											expires_in: parseInt(user.oauth_spotify_expires_at)
+										});
+									} else {
+										return;
+									}
+								}}
+							</div>
 						{/await}
 					</button>
 					<!-- menu -->
