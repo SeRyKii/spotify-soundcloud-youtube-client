@@ -10,6 +10,8 @@
 	import { getUserInfo } from '$lib/api/user';
 	import { goto } from '$app/navigation';
 	import { onMount } from 'svelte';
+	import SpotifyTokenRefresher from '$lib/SpotifyTokenRefresher.svelte';
+	import SpotifyPlayer from '$lib/SpotifyPlayer.svelte';
 
 	onMount(() => {
 		if (!$token || $token.length === 0) {
@@ -46,6 +48,10 @@
 	});
 </script>
 
+{#if $spotifyOAuth.access_token != '' || $spotifyOAuth.refresh_token != ''}
+	<SpotifyTokenRefresher />
+	<SpotifyPlayer />
+{/if}
 <AppShell>
 	<div class="mb-1" slot="header">
 		<AppBar>
@@ -75,7 +81,7 @@
 										spotifyOAuth.set({
 											access_token: user.oauth_spotify,
 											refresh_token: user.oauth_spotify_refresh,
-											expires_in: parseInt(user.oauth_spotify_expires_at)
+											expires_at: parseInt(user.oauth_spotify_expires_at)
 										});
 									} else {
 										return;

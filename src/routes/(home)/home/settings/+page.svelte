@@ -42,7 +42,7 @@
 		spotifyOAuth.set({
 			access_token: '',
 			refresh_token: '',
-			expires_in: 0
+			expires_at: 0
 		});
 	}
 </script>

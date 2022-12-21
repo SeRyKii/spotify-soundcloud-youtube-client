@@ -107,5 +107,68 @@ type SimplifiedPlaylistView = {
 type spotifyOAuth = {
 	access_token: string;
 	refresh_token: string;
-	expires_in: number;
+	expires_at: number;
 };
+
+type WebPlaybackPlayer = {
+	device_id: string;
+	volume: number;
+};
+
+type WebPlaybackError = {
+	message: string;
+};
+
+type WebPlaybackState = {
+	context: {
+		uri: string;
+		metadata: Record<string, string> | null;
+	};
+	disallows: {
+		[disallow: string]: boolean;
+
+		pausing: boolean;
+		peeking_next: boolean;
+		peeking_prev: boolean;
+		resuming: boolean;
+		seeking: boolean;
+		skipping_next: boolean;
+		skipping_prev: boolean;
+	};
+	paused: boolean;
+	position: number;
+	// No repeat - 0; repeat context - 1; repeat track - 2
+	repeat_mode: number;
+	shuffle: boolean;
+	track_window: {
+		current_track: WebPlaybackTrack;
+		previous_tracks: WebPlaybackTrack[];
+		next_tracks: WebPlaybackTrack[];
+	};
+};
+
+type WebPlaybackTrack = {
+	uri: string;
+	id: string;
+	type: 'track' | 'episode' | 'ad';
+	media_type: 'audio' | 'video';
+	name: string;
+	is_playable: boolean;
+	album: {
+		uri: string;
+		name: string;
+		images: [
+			{
+				url: string;
+			}
+		];
+	};
+	artists: [
+		{
+			uri: string;
+			name: string;
+		}
+	];
+};
+
+type WebPlaybackInstance = any | null;
