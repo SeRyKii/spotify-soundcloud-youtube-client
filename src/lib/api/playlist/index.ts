@@ -56,3 +56,17 @@ export const playlistTracks = async (
 		throw new Error(res.statusText);
 	}
 };
+
+export const playlistList = async (token: string, backendUrl: string): Promise<DbPlaylist[]> => {
+	const res = await fetch(`${backendUrl}/api/playlists`, {
+		headers: {
+			content_type: 'application/json',
+			token: token
+		}
+	});
+	if (res.ok) {
+		return (await res.json()) as DbPlaylist[];
+	} else {
+		throw new Error(res.statusText);
+	}
+};

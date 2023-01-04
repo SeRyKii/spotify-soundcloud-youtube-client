@@ -13,7 +13,7 @@
 					spotifyOAuth.set({
 						access_token: token.access_token || '',
 						refresh_token: token.refresh_token || '',
-						expires_in: token.expires_at || 0
+						expires_at: token.expires_at || 0
 					});
 					goto('/home/settings');
 				});

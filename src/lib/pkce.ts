@@ -73,7 +73,7 @@ export class PKCE {
 			return { error: json.error };
 		}
 
-		this.expires_at += json.expires_at;
+		this.expires_at += parseInt(json.expires_in, 10);
 		this.accessToken = json.access_token;
 		this.refreshToken = json.refresh_token;
 
@@ -82,6 +82,8 @@ export class PKCE {
 			access_token: this.accessToken,
 			refresh_token: this.refreshToken
 		};
+		Username;
+		Password;
 	};
 
 	token = async (refreshToken: string) => {
@@ -104,7 +106,7 @@ export class PKCE {
 			return { error: json.error };
 		}
 
-		this.expires_at = Math.floor(Date.now() / 1000) + json.expires_at;
+		this.expires_at = Math.floor(Date.now() / 1000) + json.expires_in;
 		this.accessToken = json.access_token;
 		this.refreshToken = json.refresh_token;
 
