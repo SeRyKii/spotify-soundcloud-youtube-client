@@ -11,15 +11,8 @@
 	import Fa from 'svelte-fa';
 	import Track from '$lib/components/Track.svelte';
 	import TrackPlaceholder from '$lib/components/TrackPlaceholder.svelte';
+	import { getInitials } from '$lib/utils';
 
-	const getInitials = (name: string) => {
-		return name
-			.split(' ')
-			.map((n) => n[0])
-			.join('')
-			.toUpperCase()
-			.substring(0, 2);
-	};
 	let result: Promise<DbPlaylistView>;
 	function load() {
 		const getPlaylist = async () => {

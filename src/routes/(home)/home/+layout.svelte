@@ -23,6 +23,7 @@
 	import Spotify from '$lib/players/Spotify.svelte';
 	import Changer from '$lib/players/Changer.svelte';
 	import { page } from '$app/stores';
+	import { getInitials } from '$lib/utils';
 
 	onMount(() => {
 		if (!$token || $token.length === 0) {
@@ -31,15 +32,6 @@
 	});
 
 	const drawer = writable(false);
-
-	const getInitials = (name: string) => {
-		return name
-			.split(' ')
-			.map((n) => n[0])
-			.join('')
-			.toUpperCase()
-			.substring(0, 2);
-	};
 
 	function logout() {
 		$token = '';
@@ -63,30 +55,30 @@
 		return;
 	});
 	let unsubscriber: any;
-	onMount(() => {
-		unsubscriber = currentService.subscribe((value) => {
-			let url = window.location.href;
+	const update = (value: currentPlayer) => {
+		let url = $page.url.href;
+		if (url.includes('settings')) return;
+		if (value == 'local') {
+			url = url.replace('/spotify', '');
+			url = url.replace('/youtube', '');
+			url = url.replace('/soundcloud', '');
+		} else if (value == 'spotify') {
+			url = url.replace('/youtube', '');
+			url = url.replace('/soundcloud', '');
+			url = url.replace('/home', '/home/spotify');
+		} else if (value == 'youtube') {
+			url = url.replace('/spotify', '');
+			url = url.replace('/soucndloud', '');
+			url = url.replace('/home', '/home/youtube');
+		} else if (value == 'soundcloud') {
+			url = url.replace('/spotify', '');
+			url = url.replace('/youtube', '');
+			url = url.replace('/home', '/home/soundcloud');
+		}
+		//goto(url);
+	};
 
-			if (value == 'local') {
-				url = url.replace('/spotify', '');
-				url = url.replace('/youtube', '');
-				url = url.replace('/soundcloud', '');
-			} else if (value == 'spotify') {
-				url = url.replace('/youtube', '');
-				url = url.replace('/soundcloud', '');
-				url = url.replace('/home', '/home/spotify');
-			} else if (value == 'youtube') {
-				url = url.replace('/spotify', '');
-				url = url.replace('/soucndloud', '');
-				url = url.replace('/home', '/home/youtube');
-			} else if (value == 'soundcloud') {
-				url = url.replace('/spotify', '');
-				url = url.replace('/youtube', '');
-				url = url.replace('/home', '/home/soundcloud');
-			}
-			//goto(url);
-		});
-	});
+	$: $page.url.href, update($currentService);
 </script>
 
 {#if $spotifyOAuth.access_token != '' || $spotifyOAuth.refresh_token != ''}

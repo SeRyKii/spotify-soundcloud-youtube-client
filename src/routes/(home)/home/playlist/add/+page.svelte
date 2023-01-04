@@ -17,18 +17,7 @@
 			return;
 		}
 		loading = true;
-		playlistListStore.update((list) => {
-			list.push({
-				id: 0,
-				name: name.trim(),
-				cover: '',
-				public: publicPlaylist,
-				user_id: 0,
-				username: '',
-				avatar: ''
-			});
-			return list;
-		});
+
 		const res = await fetch($globals.backendUrl + '/api/playlists', {
 			method: 'POST',
 			headers: {
@@ -61,6 +50,18 @@
 
 			setTimeout(() => {
 				loading = false;
+				playlistListStore.update((list) => {
+					list.push({
+						id: id,
+						name: name.trim(),
+						cover: '',
+						public: publicPlaylist,
+						user_id: 0,
+						username: '',
+						avatar: ''
+					});
+					return list;
+				});
 				goto(`/home/playlist/${id}`);
 			}, 3000);
 		}

@@ -13,6 +13,7 @@
 	} from '@fortawesome/free-solid-svg-icons';
 	import { RangeSlider } from '@skeletonlabs/skeleton';
 	let pos = $spotifyPlayback.position || 0;
+	$: pos = $spotifyPlayback.position || 0;
 	let volume = 50;
 	function togglePlay() {
 		$spotifyAction = 'togglePlay';
