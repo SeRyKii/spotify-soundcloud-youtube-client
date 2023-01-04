@@ -18,45 +18,8 @@
 	import { PKCE } from '$lib/pkce';
 	import { goto } from '$app/navigation';
 	const pkce = new PKCE($page.url.href);
-	
-	let lastTheme = 0;
+
 	let themeNumber = $theme;
-	let customCss = '';
-	if (themeNumber == -1) {
-		updateCssField();
-	} else {
-		customCss = '';
-	}
-
-	$: themeNumber, updateCssField();
-
-	function updateCssField() {
-		if (themeNumber == -1) {
-			if ($customTheme != '') {
-				customCss = $customTheme;
-			} else {
-				fetch($page.url.origin + Object.values(themes)[lastTheme])
-					.then((res) => res.text())
-					.then((css) => {
-						customCss = css;
-					});
-				customCss = '';
-			}
-		} else {
-			fetch($page.url.origin + Object.values(themes)[themeNumber])
-				.then((res) => res.text())
-				.then((css) => {
-					customCss = css;
-				});
-		}
-		lastTheme = themeNumber;
-		save();
-	}
-
-	function save() {
-		customTheme.set(customCss);
-		theme.set(-1);
-	
 
 	// Generate random string
 	// @ts-ignore
@@ -113,12 +76,11 @@
 		name="theme"
 	>
 		{#each Object.keys(themes) as theme, i}
-			<option value={i} selected={i === themeNumber}>{theme}</option>
+			<option value={i} selected={i === themeNumber}
+				>{theme.replace(/-/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase())}</option
+			>
 		{/each}
-		<option value={-1} selected={-1 === themeNumber}>Custom</option>
 	</select>
-	<textarea name="customCss" bind:value={customCss} cols="50" rows="10" />
-	<button class="btn btn-ghost-primary" on:click={save}>Save!</button>
 	<h2>Connections</h2>
 	<Divider />
 	<div class="flex flex-row items-center gap-2 px-2 flex-wrap sm:flex-nowrap justify-center">

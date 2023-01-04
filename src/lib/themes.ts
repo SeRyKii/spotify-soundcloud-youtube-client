@@ -1,4 +1,5 @@
 export const themes = {
+	original: '/themes/theme-original.css',
 	crimson: '/themes/theme-crimson.css',
 	'gold-nouveau': '/themes/theme-gold-nouveau.css',
 	hamlindigo: '/themes/theme-hamlindigo.css',

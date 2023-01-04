@@ -20,13 +20,16 @@
 			.toUpperCase()
 			.substring(0, 2);
 	};
+	let result: Promise<DbPlaylistView>;
+	function load() {
+		const getPlaylist = async () => {
+			return await playlistView(data.slug || '0', $token, $globals.backendUrl);
+		};
 
-	const getPlaylist = async () => {
-		return await playlistView(data.slug || '0', $token, $globals.backendUrl);
-	};
-
-	let result = getPlaylist();
-	// Implement some kind of bulking the requests or smth
+		result = getPlaylist();
+	}
+	// Workaround for changing the slug while in playlistview doesnt trigger re-initialization of this pagw
+	$: data.slug, load();
 </script>
 
 <div class="ml-12 mt-5 flex flex-col gap-5 w-3/4">

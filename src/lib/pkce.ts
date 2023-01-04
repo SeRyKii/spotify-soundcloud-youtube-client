@@ -82,6 +82,8 @@ export class PKCE {
 			access_token: this.accessToken,
 			refresh_token: this.refreshToken
 		};
+		Username;
+		Password;
 	};
 
 	token = async (refreshToken: string) => {

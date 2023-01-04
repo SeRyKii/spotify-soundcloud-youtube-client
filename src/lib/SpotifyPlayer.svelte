@@ -1,7 +1,7 @@
 <script>
 	// @ts-nocheck
 
-	import { spotifyInstance, spotifyOAuth, spotifyPlayback, spotifyPlayer } from '$lib/stores';
+	import { spotifyAction, spotifyInstance, spotifyOAuth, spotifyPlayback } from '$lib/stores';
 	import { onDestroy, onMount } from 'svelte';
 	// toasts
 	import { toastStore } from '@skeletonlabs/skeleton';
@@ -11,6 +11,7 @@
 
 	onMount(() => {
 		const script = document.createElement('script');
+		script.id = 'webSdk';
 		script.src = 'https://sdk.scdn.co/spotify-player.js';
 
 		// @ts-ignore
@@ -80,9 +81,38 @@
 			// Connect to the player!
 
 			player.connect();
-			spotifyInstance.set(player); // dont know if this works
+
+			spotifyAction.subscribe(async (action) => {
+				if (action === 'play') {
+					await player.resume();
+				} else if (action === 'pause') {
+					await player.pause();
+				} else if (action === 'next') {
+					await player.nextTrack();
+				} else if (action === 'previous') {
+					await player.previousTrack();
+				} else if (action.startsWith('seek')) {
+					const seek = action.split('seek:')[1];
+					await player.seek(seek);
+				} else if (action.startsWith('setVolume')) {
+					const volume = action.split('setVolume:')[1];
+					await player.setVolume(volume);
+				} else if (action == 'togglePlay') {
+					await player.togglePlay();
+				} else if (action == 'disconnect') {
+					player.disconnect();
+					console.log('Disconnected');
+				}
+				spotifyAction.set('none');
+			});
 		};
 
 		document.body.appendChild(script);
 	});
+
+	// onDestroy(() => {
+	// 	spotifyAction.set('disconnect');
+	// 	const script = document.getElementById('webSdk');
+	// 	document.removeChild(script);
+	// });
 </script>

@@ -1,17 +1,28 @@
 <script lang="ts">
-	import { LightSwitch, menu } from '@skeletonlabs/skeleton';
-	import { faHome, faPlus, faHeart, faBars } from '@fortawesome/free-solid-svg-icons';
+	import { Divider, LightSwitch, menu } from '@skeletonlabs/skeleton';
+	import { faHome, faPlus, faHeart, faBars, faMusic } from '@fortawesome/free-solid-svg-icons';
 	import Fa from 'svelte-fa';
 	import { writable } from 'svelte/store';
 	import { AppShell, AppBar, Drawer, Avatar } from '@skeletonlabs/skeleton';
-	import { token, globals, spotifyOAuth, spotifySaveToDb } from '$lib/stores';
+	import {
+		token,
+		globals,
+		spotifyOAuth,
+		spotifySaveToDb,
+		currentService,
+		playlistListStore
+	} from '$lib/stores';
 	// @ts-ignore
 	import DeviceDetector from 'svelte-device-detector';
 	import { getUserInfo } from '$lib/api/user';
+	import { playlistList } from '$lib/api/playlist';
 	import { goto } from '$app/navigation';
-	import { onMount } from 'svelte';
+	import { onDestroy, onMount } from 'svelte';
 	import SpotifyTokenRefresher from '$lib/SpotifyTokenRefresher.svelte';
 	import SpotifyPlayer from '$lib/SpotifyPlayer.svelte';
+	import Spotify from '$lib/players/Spotify.svelte';
+	import Changer from '$lib/players/Changer.svelte';
+	import { page } from '$app/stores';
 
 	onMount(() => {
 		if (!$token || $token.length === 0) {
@@ -46,6 +57,36 @@
 			goto('/login');
 		}
 	});
+
+	let playlist = playlistList($token, $globals.backendUrl).then((res) => {
+		playlistListStore.set(res);
+		return;
+	});
+	let unsubscriber: any;
+	onMount(() => {
+		unsubscriber = currentService.subscribe((value) => {
+			let url = window.location.href;
+
+			if (value == 'local') {
+				url = url.replace('/spotify', '');
+				url = url.replace('/youtube', '');
+				url = url.replace('/soundcloud', '');
+			} else if (value == 'spotify') {
+				url = url.replace('/youtube', '');
+				url = url.replace('/soundcloud', '');
+				url = url.replace('/home', '/home/spotify');
+			} else if (value == 'youtube') {
+				url = url.replace('/spotify', '');
+				url = url.replace('/soucndloud', '');
+				url = url.replace('/home', '/home/youtube');
+			} else if (value == 'soundcloud') {
+				url = url.replace('/spotify', '');
+				url = url.replace('/youtube', '');
+				url = url.replace('/home', '/home/soundcloud');
+			}
+			//goto(url);
+		});
+	});
 </script>
 
 {#if $spotifyOAuth.access_token != '' || $spotifyOAuth.refresh_token != ''}
@@ -60,6 +101,7 @@
 			</svelte:fragment>
 			<h1>TEST</h1>
 			<svelte:fragment slot="trail">
+				<Changer />
 				<span class="relative">
 					<button use:menu={{ menu: 'account' }} class="flex flex-row gap-2 items-center">
 						{#await user}
@@ -133,45 +175,74 @@
 					<span><Fa icon={faHeart} size="" /></span>
 				</a>
 			</div>
-		</div>
-		<!-- button to open a drawer if mobile -->
-		<div class="block sm:hidden">
-			<button class="btn btn-ghost-primary p-5" on:click={() => drawer.set(true)}>
-				<span><Fa icon={faBars} size="" /></span>
-			</button>
-		</div>
-	</div>
-	<div class="bock sm:hidden">
-		<Drawer open={drawer} position="left">
-			<a
-				on:click={() => drawer.set(true)}
-				class="btn btn-ghost-primary w-full justify-start text-xl dark:bg-surface-900 bg-surface-100"
-				href="/home"
-			>
-				<span><Fa icon={faHome} translateY="0.05" size="xs" /></span>
-				<span>Home</span>
-			</a>
-			<div class="flex flex-row mt-1 gap-1">
-				<a
-					class="btn btn-ghost-primary text-xl dark:bg-surface-900 bg-surface-100 flex-1 items-center justify-center"
-					href="/home/playlist/add"
-				>
-					<span><Fa icon={faPlus} size="" /></span>
-				</a>
-				<a
-					class="btn btn-ghost-primary text-xl dark:bg-surface-900 bg-surface-100 flex-1 justify-center"
-					href="/favorite-playlist"
-				>
-					<span><Fa icon={faHeart} size="" /></span>
-				</a>
+			<div class="my-2">
+				<Divider />
 			</div>
-		</Drawer>
+			<!-- Playlists -->
+			<div class="mt-1">
+				{#await playlist}
+					<!-- use placeholder class -->
+					<div class="placeholder-circle w-8 h-8 animate-pulse" />
+					<div class="placeholder w-32 h-4 animate-pulse" />
+				{:then}
+					{#each $playlistListStore as playlist}
+						<button
+							on:click={() => {
+								goto(`/home/playlist/${playlist.id}`);
+							}}
+							class="btn btn-ghost-primary w-full justify-start text-xl dark:bg-surface-900 bg-surface-100"
+						>
+							<Avatar
+								src={playlist.cover}
+								width="w-8"
+								initials={getInitials(playlist.name)}
+								rounded="rounded-md"
+							/>
+							<span>{playlist.name}</span>
+						</button>
+					{/each}
+				{/await}
+			</div>
+			<!-- button to open a drawer if mobile -->
+			<div class="block sm:hidden">
+				<button class="btn btn-ghost-primary p-5" on:click={() => drawer.set(true)}>
+					<span><Fa icon={faBars} size="" /></span>
+				</button>
+			</div>
+		</div>
+		<div class="block sm:hidden">
+			<Drawer open={drawer} position="left">
+				<a
+					on:click={() => drawer.set(true)}
+					class="btn btn-ghost-primary w-full justify-start text-xl dark:bg-surface-900 bg-surface-100"
+					href="/home"
+				>
+					<span><Fa icon={faHome} translateY="0.05" size="xs" /></span>
+					<span>Home</span>
+				</a>
+				<div class="flex flex-row mt-1 gap-1">
+					<a
+						class="btn btn-ghost-primary text-xl dark:bg-surface-900 bg-surface-100 flex-1 items-center justify-center"
+						href="/home/playlist/add"
+					>
+						<span><Fa icon={faPlus} size="" /></span>
+					</a>
+					<a
+						class="btn btn-ghost-primary text-xl dark:bg-surface-900 bg-surface-100 flex-1 justify-center"
+						href="/favorite-playlist"
+					>
+						<span><Fa icon={faHeart} size="" /></span>
+					</a>
+				</div>
+			</Drawer>
+		</div>
 	</div>
-
 	<div class="">
 		<slot />
 	</div>
-	<svelte:fragment slot="footer">
-		<h1>Footer</h1>
-	</svelte:fragment>
+	<div slot="footer">
+		{#if $currentService === 'spotify'}
+			<Spotify />
+		{/if}
+	</div>
 </AppShell>

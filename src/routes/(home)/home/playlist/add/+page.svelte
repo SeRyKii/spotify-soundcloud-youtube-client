@@ -1,11 +1,11 @@
 <script lang="ts">
-	import { toastStore, type ToastSettings } from '@skeletonlabs/skeleton';
-	import { globals, token } from '$lib/stores';
+	import { ProgressRadial, toastStore, type ToastSettings } from '@skeletonlabs/skeleton';
+	import { globals, playlistListStore, token } from '$lib/stores';
 	import { goto } from '$app/navigation';
 
 	let name = '';
 	let publicPlaylist = false;
-
+	let loading = false;
 	const createPlaylist = async () => {
 		if (name === '') {
 			const t: ToastSettings = {
@@ -16,6 +16,19 @@
 			toastStore.trigger(t);
 			return;
 		}
+		loading = true;
+		playlistListStore.update((list) => {
+			list.push({
+				id: 0,
+				name: name.trim(),
+				cover: '',
+				public: publicPlaylist,
+				user_id: 0,
+				username: '',
+				avatar: ''
+			});
+			return list;
+		});
 		const res = await fetch($globals.backendUrl + '/api/playlists', {
 			method: 'POST',
 			headers: {
@@ -47,6 +60,7 @@
 			toastStore.trigger(t);
 
 			setTimeout(() => {
+				loading = false;
 				goto(`/home/playlist/${id}`);
 			}, 3000);
 		}
@@ -55,8 +69,17 @@
 
 <div class="w-full ml-24">
 	<div
-		class="sm:w-3/4 w-64 flex flex-col gap-4 dark:bg-surface-800 bg-surface-200 p-5 overflow-hidden"
+		class="sm:w-3/4 w-64 flex flex-col gap-4 dark:bg-surface-800 bg-surface-200 p-5 overflow-hidden relative"
 	>
+		{#if loading == true}
+			<div
+				class="backdrop-brightness-50 absolute top-0 left-0 w-full h-full flex flex-col items-center justify-center z-10"
+			>
+				<div class="w-32 h-32">
+					<ProgressRadial>Creating playlist</ProgressRadial>
+				</div>
+			</div>
+		{/if}
 		<label for="name">
 			<span>Name</span>
 			<input type="text" name="name" id="name" bind:value={name} placeholder="Name" />

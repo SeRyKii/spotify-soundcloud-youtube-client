@@ -137,6 +137,7 @@ type WebPlaybackState = {
 	};
 	paused: boolean;
 	position: number;
+	duration: number;
 	// No repeat - 0; repeat context - 1; repeat track - 2
 	repeat_mode: number;
 	shuffle: boolean;
@@ -172,3 +173,17 @@ type WebPlaybackTrack = {
 };
 
 type WebPlaybackInstance = any | null;
+type SpotifyAction =
+	| 'play'
+	| 'pause'
+	| 'next'
+	| 'previous'
+	| 'seek'
+	| 'setRepeat'
+	| 'setShuffle'
+	| 'setVolume'
+	| 'togglePlay'
+	| 'none'
+	| any;
+type currentPlayer = 'local' | 'spotify' | 'soundcloud' | 'youtube';
+type volume = number;
